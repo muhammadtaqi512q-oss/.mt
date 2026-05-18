@@ -7,20 +7,16 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
         body { background-color: #fff; height: 100vh; display: flex; flex-direction: column; align-items: center; }
-
         /* Navigation */
         .top-nav { align-self: flex-end; padding: 20px; display: flex; gap: 15px; align-items: center; }
         .profile-icon { background: #004a7c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-
         /* Logo & Search */
         .main-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-top: -100px; }
         .logo { font-size: 90px; font-weight: 500; color: #004a7c; letter-spacing: -4px; margin-bottom: 30px; }
-
         .search-wrapper { width: 100%; max-width: 584px; position: relative; }
         .search-main { width: 100%; height: 46px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 0 50px; font-size: 16px; outline: none; }
         .search-main:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
         .search-icon { position: absolute; left: 18px; top: 12px; color: #9aa0a6; }
-
         /* Results */
         #results-container { width: 100%; max-width: 584px; margin-top: 25px; display: none; }
         .result-card { padding: 15px 20px; border-bottom: 1px solid #f1f3f4; position: relative; }
@@ -31,11 +27,9 @@
     </style>
 </head>
 <body>
-
     <div class="top-nav">
         <div class="profile-icon">T</div>
     </div>
-
     <div class="main-container">
         <h1 class="logo">Nexura</h1>
         <div class="search-wrapper">
@@ -48,9 +42,15 @@
     <script>
         const domainRulesLink = "https://muhammadtaqi512q-oss.github.io/.mt/domains";
         const websitesDataLink = "https://muhammadtaqi512q-oss.github.io/.mt/data";
-        
+                
         let websiteDB = [];
         let rankingRules = { p1: [], p2: [], p3: [] };
+
+        // Core API Copy Helper Function
+        const _copyToClipboard = async (text) => {
+            try { await navigator.clipboard.writeText(text); return true; } 
+            catch (err) { console.error("Copy failed", err); return false; }
+        };
 
         async function initEngine() {
             try {
@@ -77,6 +77,18 @@
                     const s = txt.match(/SOURCE\s+(.*)/)?.[1]?.trim();
                     if(n && l && s) websiteDB.push({ name: n, display: l, source: s });
                 });
+
+                // 3. Direct Redirect Logic
+                // Agar user direct link par aaya hai aur input field khali hai
+                const currentQuery = document.getElementById('search-input').value.trim();
+                if (!currentQuery && websiteDB.length > 0) {
+                    // Data ko priority wise sort karenge taake top website sabse pehle aaye
+                    websiteDB.sort((a, b) => getPriorityScore(a.display) - getPriorityScore(b.display));
+                    
+                    // Pehli prioritized website par direct redirect
+                    window.location.href = websiteDB[0].source;
+                }
+
             } catch (e) { console.error("Initialization Failed", e); }
         }
 
@@ -89,7 +101,7 @@
             if (rankingRules.p1.includes(ext)) return isSub ? 1.5 : 1;
             if (rankingRules.p2.includes(ext)) return isSub ? 2.5 : 2;
             if (rankingRules.p3.includes(ext)) return isSub ? 3.5 : 3;
-            
+                        
             return 10;
         }
 

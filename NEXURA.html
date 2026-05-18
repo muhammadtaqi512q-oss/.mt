@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXURA | Sovereign Registry Ecosystem</title>
+    <style>
+        :root {
+            --bg-deep: #030712;
+            --navy-dark: #0b1528;
+            --navy-light: #1e293b;
+            --gold-glow: #fbbf24;
+            --gold-bright: #f59e0b;
+            --glass-bg: rgba(11, 21, 40, 0.65);
+            --glass-border: rgba(251, 191, 36, 0.15);
+            --text-light: #f3f4f6;
+            --text-muted: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 50% -20%, #1e3a8a 0%, transparent 60%);
+        }
+
+        /* Header Style */
+        header {
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid var(--glass-border);
+            background: rgba(3, 7, 18, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
+            display: inline-block;
+        }
+
+        .logo span {
+            color: var(--gold-glow);
+        }
+
+        .tagline {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Main App Container */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Navigation Tabs */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            background: var(--navy-dark);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 1rem 2rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-btn:hover, .tab-btn.active {
+            color: #ffffff;
+            border-color: var(--gold-glow);
+            box-shadow: 0 0 15px rgba(251, 191, 36, 0.2);
+            background: var(--navy-light);
+            transform: translateY(-2px);
+        }
+
+        /* View Content Management */
+        .view-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .view-content.active {
+            display: block;
+        }
+
+        /* Glassmorphic Grid Cards */
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem 2rem;
+            backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(251, 191, 36, 0.1);
+            border-color: rgba(251, 191, 36, 0.3);
+        }
+
+        .card-tier {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--gold-glow);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .price-tag {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: baseline;
+        }
+
+        .price-tag span {
+            font-size: 1rem;
+            color: var(--text-muted);
+            margin-left: 0.5rem;
+            font-weight: 400;
+        }
+
+        .divider {
+            height: 1px;
+            background: var(--glass-border);
+            margin: 1.5rem 0;
+        }
+
+        .features-list {
+            list-style: none;
+            margin-bottom: 2rem;
+        }
+
+        .features-list li {
+            margin-bottom: 0.8rem;
+            font-size: 0.95rem;
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .features-list li::before {
+            content: "✦";
+            color: var(--gold-glow);
+        }
+
+        .badge-business {
+            background: rgba(245, 158, 11, 0.15);
+            color: var(--gold-bright);
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+        }
+
+        .badge-no-business {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        /* Configurator UI styles */
+        .selector-group {
+            margin: 1rem 0;
+        }
+
+        .selector-group label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        select {
+            width: 100%;
+            background: var(--navy-dark);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 0.8rem;
+            border-radius: 8px;
+            outline: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        select:focus {
+            border-color: var(--gold-glow);
+        }
+
+        /* Action Buttons */
+        .cta-btn {
+            background: linear-gradient(135deg, var(--gold-bright), #b45309);
+            color: #ffffff;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            width: 100%;
+            margin-top: auto;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(245, 158, 11, 0.4);
+            filter: brightness(1.1);
+        }
+
+        /* Registry Modal Overlay Setup */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(3, 7, 18, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal {
+            background: var(--navy-dark);
+            border: 1px solid var(--gold-glow);
+            border-radius: 16px;
+            width: 90%;
+            max-width: 500px;
+            padding: 2.5rem;
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.25);
+            position: relative;
+            text-align: center;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 1rem;
+            color: white;
+        }
+
+        .modal-desc {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+            line-height: 1.5;
+        }
+
+        .contact-channels {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .channel-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            padding: 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .channel-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-gmail {
+            background: #ea4335;
+            color: white;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: white;
+        }
+
+        /* Keyframes */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-tabs { flex-direction: column; gap: 0.5rem; }
+            .tab-btn { width: 100%; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">NE<span>X</span>URA</div>
+        <div class="tagline">Next-Generation Root Registry Protocol</div>
+    </header>
+
+    <div class="container">
+        <!-- Dashboard Toggles -->
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchView('tlds-view', this)">BUY YOUR OWN TLDs</button>
+            <button class="tab-btn" onclick="switchView('domains-view', this)">BUY YOUR OWN DOMAINS</button>
+            <button class="tab-btn" onclick="switchView('subdomains-view', this)">BUY YOUR OWN SUB DOMAINS</button>
+        </div>
+
+        <!-- TLDs VIEW PANEL -->
+        <div id="tlds-view" class="view-content active">
+            <div class="grid-3">
+                <!-- 1st Party TLD -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">1st Party Assets</span>
+                        <h3 class="card-title">Apex Core TLD</h3>
+                        <span class="badge-business">Business Ready</span>
+                        <div class="price-tag">$1,000 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Acquire dedicated root string</li>
+                            <li>Sell Domains through Nexura registry</li>
+                            <li>Sell Subdomains globally</li>
+                            <li>Full DNS operational control</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" onclick="openRegistry('1st Party TLD Asset Root Entry')">Deploy Registry</button>
+                </div>
+
+                <!-- 2nd Party TLD -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">2nd Party Assets</span>
+                        <h3 class="card-title">Corporate TLD</h3>
+                        <span class="badge-business">Business Ready</span>
+                        <div class="price-tag">$2,000 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Premium Corporate TLD Extension</li>
+                            <li>Commercial monetization allowed</li>
+                            <li>Create dedicated brand namespaces</li>
+                            <li>Direct API Registry hooks</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" onclick="openRegistry('2nd Party Corporate TLD Asset')">Deploy Registry</button>
+                </div>
+
+                <!-- 3rd Party TLD -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">3rd Party Assets</span>
+                        <h3 class="card-title">Enterprise TLD</h3>
+                        <span class="badge-business">Business Ready</span>
+                        <div class="price-tag">$4,000 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Maximum Authority Tier</li>
+                            <li>Run independent commercial registrar</li>
+                            <li>Sell dynamic sub-allocations</li>
+                            <li>Isolated elite root zone</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" onclick="openRegistry('3rd Party Enterprise TLD Asset')">Deploy Registry</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DOMAINS VIEW PANEL -->
+        <div id="domains-view" class="view-content">
+            <div class="grid-3">
+                <!-- 1st Party Domains Configurator -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">1st Party Premium</span>
+                        <h3 class="card-title">Core Zone Domains</h3>
+                        <span class="badge-business">Business Ready</span>
+                        
+                        <div class="selector-group">
+                            <label>Select Extension</label>
+                            <select id="firstPartyDomainSelect" onchange="updateDomainPrice('1st')">
+                                <option value="150" data-ext=".mt">.mt — $150</option>
+                                <option value="100" data-ext=".zf">.zf — $100</option>
+                                <option value="50" data-ext=".com">.com — $50</option>
+                            </select>
+                        </div>
+
+                        <div class="price-tag" id="price-display-1st">$150 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Commercial deployment allowed</li>
+                            <li><strong>Monetize via Subdomain distribution</strong></li>
+                            <li>Deploy architectural networks</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" id="btn-1st-domain" onclick="triggerDomainBuy('1st')">Secure Domain</button>
+                </div>
+
+                <!-- 2nd Party Domains Configurator -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">2nd Party Specifics</span>
+                        <h3 class="card-title">Target Ecosystems</h3>
+                        <span class="badge-business">Business Ready</span>
+
+                        <div class="selector-group">
+                            <label>Select Architecture</label>
+                            <select id="secondPartyDomainSelect" onchange="updateDomainPrice('2nd')">
+                                <option value="40" data-ext=".ai" data-note="Exclusively dedicated to Machine Learning & Artificial Intelligence platforms.">.ai (AI Exclusive) — $40</option>
+                                <option value="40" data-ext=".dev" data-note="Strictly structured deployment for corporate engineering operations.">.dev (Company Exclusive) — $40</option>
+                                <option value="30" data-ext=".tm" data-note="Allocated globally for proprietary Trademark registries.">.tm — $30</option>
+                                <option value="10" data-ext=".org" data-note="Verified Academic pricing structure framework. For Students only.">.org (Student Only) — $10</option>
+                            </select>
+                        </div>
+
+                        <div class="price-tag" id="price-display-2nd">$40 <span>/ One-time</span></div>
+                        <p id="note-display-2nd" style="font-size: 0.8rem; color: var(--gold-glow); margin-bottom: 1rem;">Exclusively dedicated to Machine Learning & Artificial Intelligence platforms.</p>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Targeted specialized extensions</li>
+                            <li>Allows monetization framework access</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" id="btn-2nd-domain" onclick="triggerDomainBuy('2nd')">Secure Domain</button>
+                </div>
+
+                <!-- 3rd Party Domains Configurator -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">3rd Party Public</span>
+                        <h3 class="card-title">Utility Domains</h3>
+                        <span class="badge-business">Business Ready</span>
+
+                        <div class="selector-group">
+                            <label>Select Extension</label>
+                            <select id="thirdPartyDomainSelect" onchange="updateDomainPrice('3rd')">
+                                <option value="14" data-ext=".kuta">.kuta — $14</option>
+                                <option value="14" data-ext=".luca">.luca — $14</option>
+                                <option value="14" data-ext=".tl">.tl — $14</option>
+                                <option value="14" data-ext=".tk">.tk — $14</option>
+                            </select>
+                        </div>
+
+                        <div class="price-tag">$14 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Budget architecture deployment</li>
+                            <li>Enables external business options</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" id="btn-3rd-domain" onclick="triggerDomainBuy('3rd')">Secure Domain</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBDOMAINS VIEW PANEL -->
+        <div id="subdomains-view" class="view-content">
+            <div class="grid-3">
+                <!-- Core Subdomains -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">1st Party Zones</span>
+                        <h3 class="card-title">Premium Subdomains</h3>
+                        <span class="badge-no-business">Commercial Restriction</span>
+                        
+                        <div class="selector-group">
+                            <label>Select Parent Base Extension</label>
+                            <select id="firstPartySubSelect" onchange="updateSubPrice('1st')">
+                                <option value="20" data-ext=".mt">On .mt Base — $20</option>
+                                <option value="20" data-ext=".zf">On .zf Base — $20</option>
+                                <option value="20" data-ext=".com">On .com Base — $20</option>
+                            </select>
+                        </div>
+
+                        <div class="price-tag" id="sub-price-1st">$20 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Non-resellable end nodes</li>
+                            <li>Ideal for isolated instances</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" id="btn-1st-sub" onclick="triggerSubBuy('1st')">Register Subdomain</button>
+                </div>
+
+                <!-- 2nd Party Subdomains -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">2nd Party Zones</span>
+                        <h3 class="card-title">Ecosystem Subdomains</h3>
+                        <span class="badge-no-business">Commercial Restriction</span>
+                        <div class="price-tag">$4 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Applies to .ai, .dev, or .tm networks</li>
+                            <li>Strictly barred from commercial resale</li>
+                            <li>Fast-tracked record deployment</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" onclick="openRegistry('2nd Party Ecosystem Subdomain Variant Allocation ($4)')">Register Subdomain</button>
+                </div>
+
+                <!-- Academic Subdomain -->
+                <div class="card">
+                    <div>
+                        <span class="card-tier">3rd Party / Academic</span>
+                        <h3 class="card-title">.ORG Subdomains</h3>
+                        <span class="badge-no-business">Commercial Restriction</span>
+                        <div class="price-tag">$2 <span>/ One-time</span></div>
+                        <div class="divider"></div>
+                        <ul class="features-list">
+                            <li>Academic instances</li>
+                            <li>Strictly prohibited from retail models</li>
+                        </ul>
+                    </div>
+                    <button class="cta-btn" onclick="openRegistry('.ORG Restricted Subdomain Layer Allocation ($2)')">Register Subdomain</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTRY ARCHITECTURE CONNECT MODAL -->
+    <div class="modal-overlay" id="registryModal">
+        <div class="modal">
+            <button class="close-modal" onclick="closeRegistry()">&times;</button>
+            <h3 class="modal-title">Connect Registry</h3>
+            <p class="modal-desc">To fulfill deployment configuration specifications for <br><strong id="modalAssetTarget" style="color:var(--gold-glow);">[Asset Location]</strong>, authenticate transmission queries with Nexura Headquarters via direct secure channels below.</p>
+            <div class="contact-channels">
+                <a href="https://wa.me/923121703302" target="_blank" class="channel-btn btn-whatsapp">
+                    Secure WhatsApp Uplink
+                </a>
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=muhammadtaqi512q@gmail.com&su=NEXURA%20Registry%20Asset%20Acquisition&body=Hello,%20I%20want%20to%20acquire%20the%20following%20registry%20asset:%20" id="gmailLink" target="_blank" class="channel-btn btn-gmail">
+                    Secure Gmail Transmission
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Tab Navigation Mechanics
+        function switchView(viewId, element) {
+            document.querySelectorAll('.view-content').forEach(view => view.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(viewId).classList.add('active');
+            element.classList.add('active');
+        }
+
+        // Price Update Computations
+        function updateDomainPrice(tier) {
+            if(tier === '1st') {
+                const selector = document.getElementById('firstPartyDomainSelect');
+                document.getElementById('price-display-1st').innerHTML = `$${selector.value} <span>/ One-time</span>`;
+            } else if (tier === '2nd') {
+                const selector = document.getElementById('secondPartyDomainSelect');
+                const selectedOption = selector.options[selector.selectedIndex];
+                document.getElementById('price-display-2nd').innerHTML = `$${selector.value} <span>/ One-time</span>`;
+                document.getElementById('note-display-2nd').innerText = selectedOption.getAttribute('data-note');
+            }
+        }
+
+        function updateSubPrice(tier) {
+            if(tier === '1st') {
+                const selector = document.getElementById('firstPartySubSelect');
+                document.getElementById('sub-price-1st').innerHTML = `$${selector.value} <span>/ One-time</span>`;
+            }
+        }
+
+        // Dynamic Router Links for Procurement Modals
+        function triggerDomainBuy(tier) {
+            let selector, ext;
+            if(tier === '1st') {
+                selector = document.getElementById('firstPartyDomainSelect');
+            } else if(tier === '2nd') {
+                selector = document.getElementById('secondPartyDomainSelect');
+            } else if(tier === '3rd') {
+                selector = document.getElementById('thirdPartyDomainSelect');
+            }
+            ext = selector.options[selector.selectedIndex].getAttribute('data-ext');
+            openRegistry(`Domain Extension Assignment (${ext} at $${selector.value})`);
+        }
+
+        function triggerSubBuy(tier) {
+            let selector, ext;
+            if(tier === '1st') {
+                selector = document.getElementById('firstPartySubSelect');
+                ext = selector.options[selector.selectedIndex].getAttribute('data-ext');
+                openRegistry(`Subdomain allocation on (${ext} zone at $${selector.value})`);
+            }
+        }
+
+        // Modal State Control Flow
+        function openRegistry(assetName) {
+            document.getElementById('modalAssetTarget').innerText = assetName;
+            
+            // Construct the structural mail encoding URL parameter mapping rules
+            const mailBase = "https://mail.google.com/mail/?view=cm&fs=1&to=muhammadtaqi512q@gmail.com";
+            const subject = encodeURIComponent("NEXURA Asset Acquisition Request");
+            const body = encodeURIComponent(`Hello,\n\nI am reaching out to securely purchase and allocate the following asset under the NEXURA Registry:\nAsset Details: ${assetName}\n\nPlease guide me through the configuration parameters.`);
+            
+            document.getElementById('gmailLink').href = `${mailBase}&su=${subject}&body=${body}`;
+            document.getElementById('registryModal').style.display = 'flex';
+        }
+
+        function closeRegistry() {
+            document.getElementById('registryModal').style.display = 'none';
+        }
+
+        // Close window interface interactions outside boundaries
+        window.onclick = function(event) {
+            const modal = document.getElementById('registryModal');
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>

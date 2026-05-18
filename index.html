@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nexura</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Arial, sans-serif; }
+        
+        body { 
+            background-color: #fff; 
+            height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center;
+        }
+
+        /* Top Right Icons (Optional but adds to the look) */
+        .top-nav {
+            align-self: flex-end;
+            padding: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .top-nav a { text-decoration: none; color: #000; font-size: 13px; }
+        .profile-icon {
+            background: #004a7c; color: white; width: 32px; height: 32px; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-size: 14px; font-weight: bold;
+        }
+
+        /* Main Content */
+        .main-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            margin-top: -100px; /* Logo center karne ke liye balance */
+        }
+
+        .logo {
+            font-size: 90px;
+            font-weight: 500;
+            color: #004a7c;
+            letter-spacing: -3px;
+            margin-bottom: 30px;
+            user-select: none;
+        }
+
+        /* Search Bar */
+        .search-wrapper {
+            width: 100%;
+            max-width: 584px;
+            position: relative;
+        }
+
+        .search-main {
+            width: 100%;
+            height: 46px;
+            border: 1px solid #dfe1e5;
+            border-radius: 24px;
+            padding: 0 50px;
+            font-size: 16px;
+            outline: none;
+            transition: box-shadow 0.2s;
+        }
+
+        .search-main:hover, .search-main:focus {
+            box-shadow: 0 1px 6px rgba(32,33,36,0.28);
+            border-color: transparent;
+        }
+
+        .search-icon { position: absolute; left: 18px; top: 12px; color: #9aa0a6; font-size: 18px; }
+
+        /* Results Area */
+        #results-container {
+            width: 100%;
+            max-width: 584px;
+            margin-top: 20px;
+            display: none; /* Hidden until search */
+        }
+
+        .result-card {
+            padding: 12px 20px;
+            border-bottom: 1px solid #f1f3f4;
+            transition: background 0.2s;
+            border-radius: 8px;
+        }
+        .result-card:hover { background-color: #f8f9fa; }
+
+        .res-url { font-size: 12px; color: #70757a; display: block; margin-bottom: 2px; }
+        .res-title { font-size: 18px; color: #1a0dab; text-decoration: none; font-weight: 400; }
+        .res-title:hover { text-decoration: underline; }
+
+        /* Custom Shortcut Button for Google */
+        .google-btn-wrapper {
+            margin-top: 30px;
+            display: flex;
+            gap: 20px;
+        }
+        .shortcut {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #3c4043;
+            font-size: 12px;
+        }
+        .icon-circle {
+            width: 48px; height: 48px; background: #f1f3f4; 
+            border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="top-nav">
+        <a href="#">Gmail</a>
+        <a href="#">Images</a>
+        <div class="profile-icon">T</div>
+    </div>
+
+    <div class="main-container">
+        <h1 class="logo">Nexura</h1>
+
+        <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-main" placeholder="Search Nexura or type a URL">
+        </div>
+
+        <div class="google-btn-wrapper" id="static-shortcuts">
+            <a href="https://www.google.com" class="shortcut">
+                <div class="icon-circle">
+                    <img src="https://www.google.com/favicon.ico" width="24">
+                </div>
+                <span>GOOGLE</span>
+            </a>
+        </div>
+
+        <div id="results-container"></div>
+    </div>
+
+    <script>
+        const dataSource = "https://muhammadtaqi512q-oss.github.io/check/";
+        let db = [];
+
+        async function fetchDb() {
+            try {
+                const r = await fetch(dataSource);
+                const t = await r.text();
+                const doc = new DOMParser().parseFromString(t, 'text/html');
+                doc.querySelectorAll('p').forEach(p => {
+                    const txt = p.innerText;
+                    const n = txt.match(/NAME\s+(.*?)\s+LINK/)?.[1]?.trim();
+                    const l = txt.match(/LINK\s+(.*?)\s+SOURCE/)?.[1]?.trim();
+                    const s = txt.match(/SOURCE\s+(.*)/)?.[1]?.trim();
+                    if(n && l && s) db.push({ name: n, display: l, source: s });
+                });
+            } catch(e) {}
+        }
+
+        const input = document.getElementById('search-input');
+        const results = document.getElementById('results-container');
+        const staticShortcuts = document.getElementById('static-shortcuts');
+
+        input.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            
+            if (query === "") {
+                results.style.display = "none";
+                staticShortcuts.style.display = "flex";
+                return;
+            }
+
+            // Hide shortcuts when searching
+            staticShortcuts.style.display = "none";
+            
+            const filtered = db.filter(i => 
+                i.name.toLowerCase().includes(query) || 
+                i.display.toLowerCase().includes(query)
+            );
+
+            render(filtered);
+        });
+
+        function render(data) {
+            results.innerHTML = "";
+            results.style.display = "block";
+            if (data.length > 0) {
+                data.forEach(item => {
+                    const div = document.createElement('div');
+                    div.className = 'result-card';
+                    div.innerHTML = `
+                        <span class="res-url">${item.display}</span>
+                        <a href="${item.source}" class="res-title" target="_blank">${item.name}</a>
+                    `;
+                    results.appendChild(div);
+                });
+            } else {
+                results.innerHTML = "<p style='text-align:center; color:#70757a; margin-top:20px;'>No results found.</p>";
+            }
+        }
+
+        fetchDb();
+    </script>
+</body>
+</html>

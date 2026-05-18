@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SUBWAY RUN</title>
+    <style>
+        body { margin: 0; background: #002147; color: white; font-family: sans-serif; overflow: hidden; }
+        canvas { display: block; margin: auto; height: 100vh; background: #000; aspect-ratio: 9/16; }
+        #crash { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); flex-direction:column; align-items:center; justify-content:center; z-index:100; }
+        .btn { padding:15px 40px; background:#0f0; color:#000; border:none; font-weight:bold; cursor:pointer; border-radius:10px; }
+        .ctrls { position:fixed; bottom:20px; width:100%; display:flex; justify-content:center; gap:10px; }
+        .cb { width:60px; height:60px; background:rgba(255,255,255,0.1); border:2px solid #fff; border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; font-weight:bold; }
+    </style>
+</head>
+<body>
+    <div id="crash">
+        <h1 style="color:#ff0033;">💥 CAR CRASHED!</h1>
+        <p>SCORE: <span id="fs">0</span></p>
+        <button class="btn" onclick="location.reload()">RESTART RACE</button>
+    </div>
+    <div style="position:fixed; top:20px; width:100%; text-align:center; font-weight:bold; color:#ffcc00; text-shadow:2px 2px #000;">SUBWAY RUN | BY MUHAMMAD TAQI</div>
+    <canvas id="c"></canvas>
+    <div class="ctrls">
+        <div class="cb" onclick="m(-1)">L</div>
+        <div class="cb" style="width:90px; border-radius:10px;" onclick="j()">JUMP</div>
+        <div class="cb" onclick="m(1)">R</div>
+    </div>
+    <script>
+        const cvs=document.getElementById("c"), ctx=cvs.getContext("2d");
+        cvs.width=400; cvs.height=700;
+        let l=1, py=0, vy=0, jm=false, sc=0, ob=[], sp=8;
+        function m(d){ l=Math.max(0,Math.min(2,l+d)); }
+        function j(){ if(!jm){ vy=-18; jm=true; } }
+        function loop(){
+            ctx.fillStyle="#002147"; ctx.fillRect(0,0,400,700);
+            if(jm){ py+=vy; vy+=0.95; if(py>=0){ py=0; jm=false; } }
+            ctx.font="55px Arial"; ctx.textAlign="center";
+            ctx.fillText("🚎", (400/3)*l+66, 600+py);
+            if(Math.random()<0.02) ob.push({l:Math.floor(Math.random()*3), z:-100});
+            ob.forEach((o,i)=>{
+                o.z+=sp; ctx.font="70px Arial"; ctx.fillText("💂", (400/3)*o.l+66, o.z);
+                if(o.l===l && o.z>520 && o.z<630 && py>-45){ 
+                    document.getElementById("crash").style.display="flex"; 
+                    document.getElementById("fs").innerText=sc;
+                    return; 
+                }
+                if(o.z>800){ ob.splice(i,1); sc+=10; sp+=0.04; }
+            });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    </script>
+</body>
+</html>

@@ -1,159 +1,630 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nexura - Core Engine</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: #fff; height: 100vh; display: flex; flex-direction: column; align-items: center; }
-        
-        /* Navigation */
-        .top-nav { align-self: flex-end; padding: 20px; display: flex; gap: 15px; align-items: center; }
-        .profile-icon { background: #004a7c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        
-        /* Logo & Search */
-        .main-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; margin-top: -100px; }
-        .logo { font-size: 90px; font-weight: 500; color: #004a7c; letter-spacing: -4px; margin-bottom: 30px; }
-        
-        .search-wrapper { width: 100%; max-width: 584px; position: relative; }
-        .search-main { width: 100%; height: 46px; border: 1px solid #dfe1e5; border-radius: 24px; padding: 0 50px; font-size: 16px; outline: none; }
-        .search-main:focus { box-shadow: 0 1px 6px rgba(32,33,36,0.28); }
-        .search-icon { position: absolute; left: 18px; top: 12px; color: #9aa0a6; }
-        
-        /* Results */
-        #results-container { width: 100%; max-width: 584px; margin-top: 25px; display: none; }
-        .result-card { padding: 15px 20px; border-bottom: 1px solid #f1f3f4; position: relative; }
-        .res-url { font-size: 13px; color: #006621; display: block; }
-        .res-title { font-size: 19px; color: #1a0dab; text-decoration: none; }
-        .res-title:hover { text-decoration: underline; }
-        .rank-badge { position: absolute; right: 10px; top: 15px; font-size: 10px; background: #f1f3f4; padding: 2px 8px; border-radius: 10px; color: #5f6368; }
-        
-        /* Core Processing Status Indicator */
-        .engine-status { font-size: 12px; color: #888; margin-top: 10px; font-style: italic; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nexura - Core Engine</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+}
+
+body{
+    background:#fff;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
+
+/* NAV */
+
+.top-nav{
+    align-self:flex-end;
+    padding:20px;
+    display:flex;
+    gap:15px;
+    align-items:center;
+}
+
+.profile-icon{
+    background:#004a7c;
+    color:white;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+/* MAIN */
+
+.main-container{
+    flex-grow:1;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    width:100%;
+    margin-top:-100px;
+}
+
+.logo{
+    font-size:90px;
+    font-weight:500;
+    color:#004a7c;
+    letter-spacing:-4px;
+    margin-bottom:30px;
+}
+
+/* SEARCH */
+
+.search-wrapper{
+    width:100%;
+    max-width:584px;
+    position:relative;
+}
+
+.search-main{
+    width:100%;
+    height:46px;
+    border:1px solid #dfe1e5;
+    border-radius:24px;
+    padding:0 50px;
+    font-size:16px;
+    outline:none;
+}
+
+.search-main:focus{
+    box-shadow:0 1px 6px rgba(32,33,36,0.28);
+}
+
+.search-icon{
+    position:absolute;
+    left:18px;
+    top:12px;
+    color:#9aa0a6;
+}
+
+/* RESULTS */
+
+#results-container{
+    width:100%;
+    max-width:584px;
+    margin-top:25px;
+    display:none;
+}
+
+.result-card{
+    padding:15px 20px;
+    border-bottom:1px solid #f1f3f4;
+    position:relative;
+    transition:0.2s;
+}
+
+.result-card:hover{
+    background:#f8fbff;
+}
+
+.res-url{
+    font-size:13px;
+    color:#006621;
+    display:block;
+}
+
+.res-title{
+    font-size:19px;
+    color:#1a0dab;
+    text-decoration:none;
+    cursor:pointer;
+}
+
+.res-title:hover{
+    text-decoration:underline;
+}
+
+.rank-badge{
+    position:absolute;
+    right:10px;
+    top:15px;
+    font-size:10px;
+    background:#f1f3f4;
+    padding:2px 8px;
+    border-radius:10px;
+    color:#5f6368;
+}
+
+/* ENGINE */
+
+.engine-status{
+    font-size:12px;
+    color:#888;
+    margin-top:10px;
+    font-style:italic;
+}
+
+/* SHARE BUTTON */
+
+.share-btn{
+    margin-top:10px;
+    background:#004a7c;
+    color:white;
+    border:none;
+    padding:8px 15px;
+    border-radius:20px;
+    cursor:pointer;
+    font-size:12px;
+}
+
+.share-btn:hover{
+    background:#00345a;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div class="top-nav">
-        <div class="profile-icon">T</div>
+<div class="top-nav">
+
+    <div class="profile-icon">
+        T
     </div>
 
-    <div class="main-container">
-        <h1 class="logo">Nexura</h1>
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="search-input" class="search-main" placeholder="Search Nexura Database..." disabled>
-        </div>
-        <div id="engine-status" class="engine-status">Connecting to Nexura Database Architecture...</div>
-        <div id="results-container"></div>
+</div>
+
+<div class="main-container">
+
+    <h1 class="logo">
+        Nexura
+    </h1>
+
+    <div class="search-wrapper">
+
+        <span class="search-icon">
+            🔍
+        </span>
+
+        <input
+            type="text"
+            id="search-input"
+            class="search-main"
+            placeholder="Search Nexura Database..."
+            disabled
+        >
+
     </div>
 
-    <script>
-        // Data Sources
-        const domainRulesLink = "https://muhammadtaqi512q-oss.github.io/.mt/domains";
-        const websitesDataLink = "https://muhammadtaqi512q-oss.github.io/.mt/data";
-                
-        let websiteDB = [];
-        let rankingRules = { p1: [], p2: [], p3: [] };
+    <div id="engine-status" class="engine-status">
+        Connecting to Nexura Database Architecture...
+    </div>
 
-        // Core Engine Dynamic Parser (Runs immediately on load)
-        async function initEngine() {
-            const statusDiv = document.getElementById('engine-status');
-            const searchInput = document.getElementById('search-input');
-            
-            try {
-                // 1. Fetch & Parse Domain Rules (CORS Safe-Proxy Built-in)
-                const ruleRes = await fetch(domainRulesLink);
-                const ruleHtml = await ruleRes.text();
-                const ruleDoc = new DOMParser().parseFromString(ruleHtml, 'text/html');
-                const ruleText = ruleDoc.getElementById('target-link').innerText.toLowerCase();
+    <div id="results-container"></div>
 
-                rankingRules.p1 = ruleText.match(/p1:\s*includes\s*(.*?)(?=\s*p2|$)/)?.[1].split(',').map(s => s.trim().replace('.', '')) || [];
-                rankingRules.p2 = ruleText.match(/p2:\s*includes\s*(.*?)(?=\s*p3|$)/)?.[1].split(',').map(s => s.trim().replace('.', '')) || [];
-                rankingRules.p3 = ruleText.match(/p3:\s*includes\s*(.*?)(?=\.|$)/)?.[1].split(',').map(s => s.trim().replace('.', '')) || [];
+</div>
 
-                // 2. Fetch & Compile Website Master Registry
-                const webRes = await fetch(websitesDataLink);
-                const webHtml = await webRes.text();
-                const webDoc = new DOMParser().parseFromString(webHtml, 'text/html');
-                const webParas = webDoc.querySelectorAll('p');
+<script>
 
-                webParas.forEach(p => {
-                    const txt = p.innerText;
-                    const n = txt.match(/NAME\s+(.*?)\s+LINK/)?.[1]?.trim();
-                    const l = txt.match(/LINK\s+(.*?)\s+SOURCE/)?.[1]?.trim();
-                    const s = txt.match(/SOURCE\s+(.*)/)?.[1]?.trim();
-                    if(n && l && s) websiteDB.push({ name: n, display: l, source: s });
+// DATA LINKS
+const domainRulesLink =
+"https://muhammadtaqi512q-oss.github.io/.mt/domains";
+
+const websitesDataLink =
+"https://muhammadtaqi512q-oss.github.io/.mt/data";
+
+// STORAGE
+let websiteDB = [];
+
+let rankingRules = {
+
+    p1:[],
+    p2:[],
+    p3:[]
+
+};
+
+// ELEMENTS
+const input =
+document.getElementById("search-input");
+
+const container =
+document.getElementById("results-container");
+
+const statusDiv =
+document.getElementById("engine-status");
+
+const profileIcon =
+document.querySelector(".profile-icon");
+
+// INIT ENGINE
+async function initEngine(){
+
+    try{
+
+        // FETCH RULES
+        const ruleRes =
+        await fetch(domainRulesLink);
+
+        const ruleHtml =
+        await ruleRes.text();
+
+        const ruleDoc =
+        new DOMParser()
+        .parseFromString(ruleHtml,"text/html");
+
+        const ruleText =
+        ruleDoc
+        .getElementById("target-link")
+        .innerText
+        .toLowerCase();
+
+        rankingRules.p1 =
+        ruleText.match(
+            /p1:\s*includes\s*(.*?)(?=\s*p2|$)/
+        )?.[1]
+        ?.split(",")
+        .map(s=>s.trim().replace(".",""))
+        || [];
+
+        rankingRules.p2 =
+        ruleText.match(
+            /p2:\s*includes\s*(.*?)(?=\s*p3|$)/
+        )?.[1]
+        ?.split(",")
+        .map(s=>s.trim().replace(".",""))
+        || [];
+
+        rankingRules.p3 =
+        ruleText.match(
+            /p3:\s*includes\s*(.*?)(?=\.|$)/
+        )?.[1]
+        ?.split(",")
+        .map(s=>s.trim().replace(".",""))
+        || [];
+
+        // FETCH DATA
+        const webRes =
+        await fetch(websitesDataLink);
+
+        const webHtml =
+        await webRes.text();
+
+        const webDoc =
+        new DOMParser()
+        .parseFromString(webHtml,"text/html");
+
+        const webParas =
+        webDoc.querySelectorAll("p");
+
+        webParas.forEach(p=>{
+
+            const txt =
+            p.innerText;
+
+            const n =
+            txt.match(
+                /NAME\s+(.*?)\s+LINK/
+            )?.[1]?.trim();
+
+            const l =
+            txt.match(
+                /LINK\s+(.*?)\s+SOURCE/
+            )?.[1]?.trim();
+
+            const s =
+            txt.match(
+                /SOURCE\s+(.*)/
+            )?.[1]?.trim();
+
+            if(n && l && s){
+
+                websiteDB.push({
+
+                    name:n,
+                    display:l,
+                    source:s
+
                 });
 
-                // Activation
-                statusDiv.innerText = "Nexura Core Engine Securely Linked.";
-                setTimeout(() => statusDiv.style.display = 'none', 2000);
-                searchInput.disabled = false;
-                searchInput.focus();
-
-            } catch (e) { 
-                console.error("Initialization Failed", e); 
-                statusDiv.innerText = "Engine Linkage Failed. Check CORS or Registry Files.";
-                statusDiv.style.color = "#cc0000";
             }
-        }
 
-        // Deep Analytical Ranking Algorithm
-        function getPriorityScore(url) {
-            const link = url.toLowerCase();
-            const parts = link.split('.');
-            const ext = parts[parts.length - 1];
-            
-            // Subdomain Detection System (Excluding default formats)
-            const isSub = (parts[0] !== 'www' && parts[0] !== 'mmm' && parts.length > 2);
-
-            if (rankingRules.p1.includes(ext)) return isSub ? 1.5 : 1;
-            if (rankingRules.p2.includes(ext)) return isSub ? 2.5 : 2;
-            if (rankingRules.p3.includes(ext)) return isSub ? 3.5 : 3;
-                        
-            return 10; // Default Low Priority
-        }
-
-        const input = document.getElementById('search-input');
-        const container = document.getElementById('results-container');
-
-        input.addEventListener('input', () => {
-            const query = input.value.toLowerCase().trim();
-            if (!query) { container.style.display = 'none'; return; }
-
-            // Live Database Filtering
-            const filtered = websiteDB.filter(i => i.name.toLowerCase().includes(query) || i.display.toLowerCase().includes(query));
-            
-            // Real-time Priority Sorting Execution
-            filtered.sort((a, b) => getPriorityScore(a.display) - getPriorityScore(b.display));
-
-            render(filtered);
         });
 
-        function render(data) {
-            container.innerHTML = "";
-            if (data.length === 0) {
-                container.style.display = 'none';
-                return;
-            }
-            container.style.display = 'block';
-            data.forEach(item => {
-                const score = getPriorityScore(item.display);
-                const card = document.createElement('div');
-                card.className = 'result-card';
-                card.innerHTML = `
-                    <span class="res-url">${item.display}</span>
-                    <a href="${item.source}" class="res-title" target="_blank">${item.name}</a>
-                    <span class="rank-badge">P${Math.floor(score)}</span>
-                `;
-                container.appendChild(card);
-            });
+        statusDiv.innerText =
+        "Nexura Core Engine Linked";
+
+        setTimeout(()=>{
+
+            statusDiv.style.display =
+            "none";
+
+        },2000);
+
+        input.disabled = false;
+
+        input.focus();
+
+        // HASH OPEN
+        openFromHash();
+
+        // SHOW ALL IF NO HASH
+        if(!location.hash){
+
+            render(websiteDB);
+
         }
 
-        // Fire the Core Engine
-        initEngine();
-    </script>
+    }
+
+    catch(e){
+
+        console.log(e);
+
+        statusDiv.innerText =
+        "Engine Failed";
+
+        statusDiv.style.color =
+        "red";
+
+    }
+
+}
+
+// PRIORITY
+function getPriorityScore(url){
+
+    const link =
+    url.toLowerCase();
+
+    const parts =
+    link.split(".");
+
+    const ext =
+    parts[parts.length - 1];
+
+    const isSub =
+
+    (
+        parts[0] !== "www"
+        &&
+        parts[0] !== "mmm"
+        &&
+        parts.length > 2
+    );
+
+    if(
+        rankingRules.p1.includes(ext)
+    ){
+        return isSub ? 1.5 : 1;
+    }
+
+    if(
+        rankingRules.p2.includes(ext)
+    ){
+        return isSub ? 2.5 : 2;
+    }
+
+    if(
+        rankingRules.p3.includes(ext)
+    ){
+        return isSub ? 3.5 : 3;
+    }
+
+    return 10;
+
+}
+
+// SEARCH
+input.addEventListener("input",()=>{
+
+    const query =
+    input.value
+    .toLowerCase()
+    .trim();
+
+    // EMPTY
+    if(!query){
+
+        if(location.hash){
+
+            openFromHash();
+
+        }
+
+        else{
+
+            render(websiteDB);
+
+        }
+
+        return;
+
+    }
+
+    // FILTER
+    const filtered =
+    websiteDB.filter(i=>
+
+        i.name
+        .toLowerCase()
+        .includes(query)
+
+        ||
+
+        i.display
+        .toLowerCase()
+        .includes(query)
+
+    );
+
+    // SORT
+    filtered.sort(
+        (a,b)=>
+
+        getPriorityScore(a.display)
+
+        -
+
+        getPriorityScore(b.display)
+    );
+
+    render(filtered);
+
+});
+
+// RENDER
+function render(data){
+
+    container.innerHTML = "";
+
+    if(data.length === 0){
+
+        container.style.display =
+        "none";
+
+        return;
+
+    }
+
+    container.style.display =
+    "block";
+
+    data.forEach(item=>{
+
+        const score =
+        getPriorityScore(item.display);
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "result-card";
+
+        card.innerHTML = `
+
+            <span class="res-url">
+                ${item.display}
+            </span>
+
+            <div class="res-title">
+                ${item.name}
+            </div>
+
+            <span class="rank-badge">
+                P${Math.floor(score)}
+            </span>
+
+            <button class="share-btn">
+                Share
+            </button>
+
+        `;
+
+        // CLICK PROFILE
+        card.querySelector(
+            ".res-title"
+        ).addEventListener("click",()=>{
+
+            location.hash =
+            item.name
+            .toLowerCase();
+
+        });
+
+        // SHARE BUTTON
+        card.querySelector(
+            ".share-btn"
+        ).addEventListener("click",()=>{
+
+            const shareURL =
+
+            window.location.origin +
+
+            window.location.pathname +
+
+            "#" +
+
+            item.name
+            .toLowerCase();
+
+            navigator.clipboard
+            .writeText(shareURL);
+
+            alert(
+                "Copied Link:\n\n" +
+                shareURL
+            );
+
+        });
+
+        container.appendChild(card);
+
+    });
+
+}
+
+// HASH FUNCTION
+function openFromHash(){
+
+    const hash =
+    location.hash
+    .replace("#","")
+    .trim()
+    .toLowerCase();
+
+    // NO HASH
+    if(!hash){
+
+        render(websiteDB);
+
+        return;
+
+    }
+
+    // ONLY MATCH
+    const filtered =
+    websiteDB.filter(item=>
+
+        item.name
+        .toLowerCase()
+        === hash
+
+    );
+
+    render(filtered);
+
+}
+
+// SHOW ALL
+profileIcon.addEventListener("click",()=>{
+
+    location.hash = "";
+
+    input.value = "";
+
+    render(websiteDB);
+
+});
+
+// HASH CHANGE
+window.addEventListener(
+    "hashchange",
+    openFromHash
+);
+
+// START
+initEngine();
+
+</script>
+
 </body>
 </html>

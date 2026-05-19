@@ -1,216 +1,350 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Nexura - User Profiles</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Nexura Profiles</title>
+
 <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: #fff; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 20px; }
-    .top-nav { align-self: flex-end; padding: 10px 20px; display: flex; gap: 15px; align-items: center; }
-    .profile-icon { background: #004a7c; color: white; width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; user-select: none; }
 
-    .main-container { flex-grow: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; max-width: 600px; margin-top: 50px; }
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Segoe UI,sans-serif;
+}
 
-    .logo { font-size: 90px; font-weight: 700; color: #004a7c; letter-spacing: -4px; margin-bottom: 30px; user-select: none; }
+body{
+    background:#ffffff;
+    padding:25px;
+}
 
-    .search-wrapper { width: 100%; position: relative; }
-    .search-main { width: 100%; height: 46px; border: 2px solid #004a7c; border-radius: 25px; padding: 0 50px; font-size: 18px; outline: none; transition: box-shadow 0.3s ease; }
-    .search-main:focus { box-shadow: 0 0 8px 2px #004a7caa; }
-    .search-icon { position: absolute; left: 18px; top: 12px; color: #004a7caa; font-size: 22px; }
-    
-    #engine-status { font-size: 14px; color: #888; margin-top: 10px; font-style: italic; user-select: none; }
-    #results-container { width: 100%; margin-top: 20px; display: none; box-shadow: 0 4px 8px rgb(0 74 124 / 0.1); border-radius: 12px; background: #f9fbff; }
+.logo{
+    text-align:center;
+    font-size:85px;
+    font-weight:900;
+    color:#004a7c;
+    margin-bottom:30px;
+    letter-spacing:-4px;
+}
 
-    .result-card {
-      padding: 15px 20px; border-bottom: 1px solid #d1dff5;  display: flex; justify-content: space-between; align-items: center;
-      cursor: pointer; transition: background 0.2s ease; border-radius: 0 0 12px 12px;
-    }
-    .result-card:hover { background: #d7e1fb; }
-    .res-title { font-size: 18px; font-weight: 600; color: #004a7c; text-decoration: none; }
-    .res-url { font-size: 13px; color: #1a73e8; font-style: italic; user-select: text; }
+.search-box{
+    max-width:700px;
+    margin:auto;
+    position:relative;
+}
 
-    /* Profile Page */
-    #profile-page { display: none; width: 100%; max-width: 580px; background: #f0f7ff; padding: 25px 30px; border-radius: 16px; box-shadow: 0 10px 20px rgb(0 74 124 / 0.15); flex-direction: column; }
+.search-box input{
+    width:100%;
+    height:60px;
+    border-radius:50px;
+    border:3px solid #004a7c;
+    padding-left:60px;
+    padding-right:20px;
+    font-size:18px;
+    outline:none;
+}
 
-    #profile-page h2 { color: #004a7c; font-weight: 700; font-size: 28px; margin-bottom: 15px; }
-    #profile-page p { font-size: 16px; color: #444; line-height: 1.5; white-space: pre-wrap; }
+.search-icon{
+    position:absolute;
+    left:20px;
+    top:16px;
+    font-size:24px;
+    color:#004a7c;
+}
 
-    #back-to-search {
-       margin-top: 25px;
-       background: #004a7c;
-       color: white;
-       border: none;
-       padding: 12px 30px;
-       border-radius: 30px;
-       font-weight: 600;
-       font-size: 16px;
-       cursor: pointer;
-       box-shadow: 0 4px 8px rgb(0 74 124 / 0.3);
-       transition: background 0.3s ease;
-    }
-    #back-to-search:hover {
-       background: #00345a;
-    }
+#status{
+    text-align:center;
+    margin-top:18px;
+    color:#666;
+    font-size:16px;
+}
+
+#results{
+    max-width:700px;
+    margin:30px auto;
+}
+
+.card{
+    background:#f5faff;
+    border:1px solid #dbe8ff;
+    border-radius:25px;
+    padding:22px;
+    margin-bottom:18px;
+    cursor:pointer;
+    transition:0.3s;
+    box-shadow:0 6px 15px rgba(0,0,0,0.05);
+}
+
+.card:hover{
+    transform:translateY(-4px);
+    background:#edf6ff;
+}
+
+.card h2{
+    color:#004a7c;
+    font-size:30px;
+    margin-bottom:10px;
+}
+
+.card p{
+    font-size:17px;
+    color:#333;
+    line-height:1.8;
+}
+
+.details{
+    display:none;
+    margin-top:15px;
+    border-top:1px solid #cfe0ff;
+    padding-top:15px;
+}
+
+.show{
+    display:block;
+}
+
 </style>
 </head>
+
 <body>
 
-<div class="top-nav">
-    <div class="profile-icon" title="Show All Profiles">T</div>
+<div class="logo">
+    Nexura
 </div>
 
-<div class="main-container">
+<div class="search-box">
 
-    <h1 class="logo">Nexura</h1>
-
-    <div class="search-wrapper" id="search-wrapper">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="search-input" class="search-main" placeholder="Enter user name here..." />
+    <div class="search-icon">
+        🔍
     </div>
 
-    <div id="engine-status">Loading Nexura Profiles...</div>
-
-    <div id="results-container"></div>
-
-    <div id="profile-page">
-        <h2 id="profile-name"></h2>
-        <p id="profile-info"></p>
-        <button id="back-to-search">Back to Search</button>
-    </div>
+    <input 
+        type="text"
+        id="searchInput"
+        placeholder="Search profiles..."
+    >
 
 </div>
+
+<div id="status">
+    Loading Profiles...
+</div>
+
+<div id="results"></div>
 
 <script>
-    const profileUrl = "https://muhammadtaqi512q-oss.github.io/.mt/PROFILE";
 
-    const input = document.getElementById('search-input');
-    const resultsContainer = document.getElementById('results-container');
-    const engineStatus = document.getElementById('engine-status');
-    const profilePage = document.getElementById('profile-page');
-    const profileName = document.getElementById('profile-name');
-    const profileInfo = document.getElementById('profile-info');
-    const backBtn = document.getElementById('back-to-search');
-    const searchWrapper = document.getElementById('search-wrapper');
-    const profileIcon = document.querySelector('.profile-icon');
+const profileUrl =
+"https://muhammadtaqi512q-oss.github.io/.mt/PROFILE";
 
-    let profileData = [];
+const results =
+document.getElementById("results");
 
-    // Fetch profile data from profile URL and parse into objects
-    async function fetchProfiles() {
-        try {
-            const res = await fetch(profileUrl);
-            const html = await res.text();
-            const doc = new DOMParser().parseFromString(html, 'text/html');
-            const pText = doc.getElementById("target-link").innerText;
+const searchInput =
+document.getElementById("searchInput");
 
-            // We mock multiple profiles by splitting by "NAME "
-            const rawProfiles = pText.split("NAME ").filter(Boolean);
-            profileData = rawProfiles.map(entry => {
-                const name = entry.split(' ')[0].trim();
-                const fullInfo = "NAME " + entry.trim();
-                return { name: name.toLowerCase(), fullInfo };
-            });
+const status =
+document.getElementById("status");
 
-            engineStatus.innerText = "Profiles Loaded. Enter username to view profile.";
-        } catch (e) {
-            engineStatus.innerText = "Failed to load Profiles.";
-            engineStatus.style.color = "#cc0000";
-            console.error(e);
-        }
-    }
+let profiles = [];
 
-    function displayResults(matches) {
-        resultsContainer.innerHTML = "";
-        if (matches.length === 0) {
-            resultsContainer.style.display = 'none';
-            return;
-        }
+async function fetchProfiles(){
 
-        matches.forEach(user => {
-            const card = document.createElement('div');
-            card.className = 'result-card';
-            card.innerHTML = `
-                <div>
-                    <div class="res-title">${user.name}</div>
-                    <div class="res-url">${user.fullInfo.substring(0, 40)}...</div>
-                </div>
-            `;
-            card.addEventListener('click', () => {
-                location.hash = user.name;
-            });
-            resultsContainer.appendChild(card);
+    try{
+
+        const response =
+        await fetch(profileUrl);
+
+        const html =
+        await response.text();
+
+        const doc =
+        new DOMParser()
+        .parseFromString(html,"text/html");
+
+        let texts = [];
+
+        // FETCH ALL PARAGRAPHS
+        doc.querySelectorAll("p").forEach(el=>{
+
+            const text =
+            el.innerText.trim();
+
+            if(text.length > 5){
+
+                texts.push(text);
+
+            }
+
         });
 
-        resultsContainer.style.display = 'block';
+        // REMOVE DUPLICATES
+        texts = [...new Set(texts)];
+
+        profiles = [];
+
+        texts.forEach(text=>{
+
+            const splitProfiles =
+            text.split("NAME ")
+            .filter(Boolean);
+
+            splitProfiles.forEach(profile=>{
+
+                profiles.push({
+
+                    details:
+                    "NAME " +
+                    profile.trim()
+
+                });
+
+            });
+
+        });
+
+        status.innerHTML =
+        `Loaded ${profiles.length} Profiles`;
+
+        displayProfiles(profiles);
+
     }
 
-    function showProfile(name) {
-        const profile = profileData.find(p => p.name === name);
-        if (!profile) {
-            profileName.textContent = `User "${name}" not found.`;
-            profileInfo.textContent = "";
-            profilePage.style.display = 'flex';
-            searchWrapper.style.display = 'none';
-            resultsContainer.style.display = 'none';
-            engineStatus.style.display = 'none';
-            return;
-        }
-        profileName.textContent = profile.name.toUpperCase();
-        profileInfo.textContent = profile.fullInfo.replace('NAME ' + profile.name, '').trim();
-        profilePage.style.display = 'flex';
-        searchWrapper.style.display = 'none';
-        resultsContainer.style.display = 'none';
-        engineStatus.style.display = 'none';
+    catch(error){
+
+        console.log(error);
+
+        status.innerHTML =
+        "Failed To Load Profiles";
+
     }
 
-    function backToSearch() {
-        profilePage.style.display = 'none';
-        searchWrapper.style.display = 'block';
-        engineStatus.style.display = 'block';
-        engineStatus.style.color = '#888';
-        engineStatus.innerText = "Enter username to view profile.";
-        resultsContainer.style.display = 'none';
-        input.value = "";
-        input.focus();
-        location.hash = '';
-    }
+}
 
-    // Show all profiles on clicking the top "T" circle
-    profileIcon.addEventListener('click', () => {
-        engineStatus.style.color = '#004a7c';
-        engineStatus.innerText = "Showing all profiles.";
-        displayResults(profileData);
-        profilePage.style.display = 'none';
-        searchWrapper.style.display = 'block';
-        input.value = '';
-        input.focus();
-        location.hash = '';
+// EXTRACT TEXT
+function extractValue(text,key){
+
+    const regex =
+    new RegExp(
+        key + "\\s+(.*?)(?=NAME|WORK|AGE|EXPERIENCE|$)",
+        "i"
+    );
+
+    const match =
+    text.match(regex);
+
+    return match
+    ? match[1].trim()
+    : "Not Found";
+
+}
+
+// SHOW PROFILES
+function displayProfiles(data){
+
+    results.innerHTML = "";
+
+    data.forEach(profile=>{
+
+        const name =
+        extractValue(
+            profile.details,
+            "NAME"
+        );
+
+        const work =
+        extractValue(
+            profile.details,
+            "WORK"
+        );
+
+        const age =
+        extractValue(
+            profile.details,
+            "AGE"
+        );
+
+        const experience =
+        extractValue(
+            profile.details,
+            "EXPERIENCE"
+        );
+
+        const card =
+        document.createElement("div");
+
+        card.className =
+        "card";
+
+        card.innerHTML = `
+
+            <!-- ALWAYS SHOW -->
+
+            <h2>
+                NAME ${name}
+            </h2>
+
+            <p>
+                WORK ${work}
+            </p>
+
+            <!-- HIDDEN DETAILS -->
+
+            <div class="details">
+
+                <p>
+                    AGE ${age}
+                </p>
+
+                <p>
+                    EXPERIENCE ${experience}
+                </p>
+
+            </div>
+
+        `;
+
+        // CLICK TO OPEN DETAILS
+        card.addEventListener("click",()=>{
+
+            const details =
+            card.querySelector(".details");
+
+            details.classList.toggle("show");
+
+        });
+
+        results.appendChild(card);
+
     });
 
-    backBtn.addEventListener('click', backToSearch);
+}
 
-    input.addEventListener('input', () => {
-        const val = input.value.trim().toLowerCase();
-        engineStatus.style.color = '#888';
-        if (!val) {
-            resultsContainer.style.display = 'none';
-            return;
-        }
-        const filteredUsers = profileData.filter(p => p.name.includes(val));
-        displayResults(filteredUsers);
+// SEARCH
+searchInput.addEventListener("input",()=>{
+
+    const value =
+    searchInput.value
+    .toLowerCase()
+    .trim();
+
+    const filtered =
+    profiles.filter(profile=>{
+
+        return profile.details
+        .toLowerCase()
+        .includes(value);
+
     });
 
-    window.addEventListener('hashchange', () => {
-        const userName = location.hash.slice(1).toLowerCase();
-        if (userName) {
-            showProfile(userName);
-        } else {
-            backToSearch();
-        }
-    });
+    displayProfiles(filtered);
 
-    fetchProfiles();
+});
+
+// START
+fetchProfiles();
 
 </script>
 

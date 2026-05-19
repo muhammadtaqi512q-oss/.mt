@@ -24,7 +24,7 @@ body{
     align-items:center;
 }
 
-/* TOP NAV */
+/* TOP */
 
 .top-nav{
     width:100%;
@@ -79,11 +79,10 @@ body{
     padding-right:20px;
     font-size:18px;
     outline:none;
-    transition:0.3s;
 }
 
 .search-main:focus{
-    box-shadow:0 0 12px #004a7c55;
+    box-shadow:0 0 10px #004a7c55;
 }
 
 .search-icon{
@@ -173,7 +172,6 @@ body{
     color:white;
     font-size:16px;
     cursor:pointer;
-    transition:0.3s;
 }
 
 .share-btn:hover{
@@ -224,7 +222,7 @@ body{
 
 <script>
 
-// PROFILE FILE URL
+// PROFILE URL
 const profileUrl =
 "https://muhammadtaqi512q-oss.github.io/.mt/PROFILE";
 
@@ -264,12 +262,12 @@ async function fetchProfiles(){
         // FETCH ALL P TAGS
         doc.querySelectorAll("p").forEach(el=>{
 
-            const txt =
+            const text =
             el.innerText.trim();
 
-            if(txt.length > 5){
+            if(text.length > 5){
 
-                allTexts.push(txt);
+                allTexts.push(text);
 
             }
 
@@ -281,14 +279,14 @@ async function fetchProfiles(){
 
         profileData = [];
 
-        // SPLIT MULTIPLE PROFILES
+        // SPLIT PROFILES
         allTexts.forEach(text=>{
 
-            const rawProfiles =
+            const profiles =
             text.split("NAME ")
             .filter(Boolean);
 
-            rawProfiles.forEach(profile=>{
+            profiles.forEach(profile=>{
 
                 profileData.push({
 
@@ -305,10 +303,15 @@ async function fetchProfiles(){
         engineStatus.innerText =
         `Loaded ${profileData.length} Profiles`;
 
-        displayResults(profileData);
-
-        // OPEN PROFILE FROM URL
+        // CHECK HASH
         openProfileFromHash();
+
+        // NO HASH
+        if(!location.hash){
+
+            displayResults(profileData);
+
+        }
 
     }
 
@@ -326,7 +329,7 @@ async function fetchProfiles(){
 
 }
 
-// EXTRACT TEXT
+// EXTRACT VALUE
 function extractValue(text,key){
 
     const regex =
@@ -348,6 +351,24 @@ function extractValue(text,key){
 function displayResults(matches){
 
     resultsContainer.innerHTML = "";
+
+    if(matches.length === 0){
+
+        resultsContainer.innerHTML = `
+
+            <div class="result-card">
+
+                <div class="res-title">
+                    Profile Not Found
+                </div>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
 
     matches.forEach(user=>{
 
@@ -391,7 +412,7 @@ function displayResults(matches){
                 WORK ${work}
             </div>
 
-            <div class="profile-details">
+            <div class="profile-details show">
 
                 <p>
                     AGE ${age}
@@ -409,7 +430,7 @@ function displayResults(matches){
 
         `;
 
-        // OPEN DETAILS
+        // CARD CLICK
         card.addEventListener("click",(e)=>{
 
             if(
@@ -419,13 +440,8 @@ function displayResults(matches){
                 return;
             }
 
-            const details =
-            card.querySelector(
-                ".profile-details"
-            );
-
-            details.classList
-            .toggle("show");
+            location.hash =
+            name.toLowerCase();
 
         });
 
@@ -461,6 +477,43 @@ function displayResults(matches){
 
 }
 
+// OPEN PROFILE FROM HASH
+function openProfileFromHash(){
+
+    const hash =
+    location.hash
+    .replace("#","")
+    .trim()
+    .toLowerCase();
+
+    // NO HASH
+    if(!hash){
+
+        displayResults(profileData);
+
+        return;
+
+    }
+
+    // ONLY MATCH PROFILE
+    const filtered =
+    profileData.filter(profile=>{
+
+        const name =
+        extractValue(
+            profile.fullInfo,
+            "NAME"
+        )
+        .toLowerCase();
+
+        return name === hash;
+
+    });
+
+    displayResults(filtered);
+
+}
+
 // SEARCH
 input.addEventListener("input",()=>{
 
@@ -469,14 +522,26 @@ input.addEventListener("input",()=>{
     .trim()
     .toLowerCase();
 
+    // EMPTY
     if(!value){
 
-        displayResults(profileData);
+        if(location.hash){
+
+            openProfileFromHash();
+
+        }
+
+        else{
+
+            displayResults(profileData);
+
+        }
 
         return;
 
     }
 
+    // FILTER
     const filtered =
     profileData.filter(profile=>
 
@@ -493,65 +558,16 @@ input.addEventListener("input",()=>{
 // SHOW ALL
 profileIcon.addEventListener("click",()=>{
 
+    location.hash = "";
+
+    input.value = "";
+
     displayResults(profileData);
 
     engineStatus.innerText =
     "Showing All Profiles";
 
 });
-
-// OPEN PROFILE FROM URL HASH
-function openProfileFromHash(){
-
-    const hash =
-    location.hash
-    .replace("#","")
-    .trim()
-    .toLowerCase();
-
-    if(!hash) return;
-
-    const cards =
-    document.querySelectorAll(
-        ".result-card"
-    );
-
-    cards.forEach(card=>{
-
-        const title =
-        card.querySelector(
-            ".res-title"
-        )
-        .innerText
-        .toLowerCase();
-
-        if(title.includes(hash)){
-
-            card.scrollIntoView({
-
-                behavior:"smooth",
-                block:"center"
-
-            });
-
-            // OPEN DETAILS
-            const details =
-            card.querySelector(
-                ".profile-details"
-            );
-
-            details.classList
-            .add("show");
-
-            // HIGHLIGHT
-            card.style.border =
-            "2px solid #004a7c";
-
-        }
-
-    });
-
-}
 
 // HASH CHANGE
 window.addEventListener(

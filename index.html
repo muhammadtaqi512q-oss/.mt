@@ -16,116 +16,129 @@
 }
 
 body{
-    background:#fff;
-    height:100vh;
+    background:#ffffff;
+    min-height:100vh;
     display:flex;
     flex-direction:column;
     align-items:center;
+    padding:20px;
 }
 
-/* NAV */
+/* TOP NAV */
 
 .top-nav{
-    align-self:flex-end;
-    padding:20px;
+    width:100%;
     display:flex;
-    gap:15px;
-    align-items:center;
+    justify-content:flex-end;
+    margin-bottom:20px;
 }
 
 .profile-icon{
+    width:40px;
+    height:40px;
+    border-radius:50%;
     background:#004a7c;
     color:white;
-    width:32px;
-    height:32px;
-    border-radius:50%;
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
     font-weight:bold;
     cursor:pointer;
+    user-select:none;
 }
 
 /* MAIN */
 
 .main-container{
-    flex-grow:1;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
     width:100%;
-    margin-top:-100px;
+    max-width:700px;
 }
 
 .logo{
+    text-align:center;
     font-size:90px;
-    font-weight:500;
+    font-weight:700;
     color:#004a7c;
-    letter-spacing:-4px;
     margin-bottom:30px;
+    letter-spacing:-4px;
 }
 
 /* SEARCH */
 
 .search-wrapper{
     width:100%;
-    max-width:584px;
     position:relative;
 }
 
 .search-main{
     width:100%;
-    height:46px;
-    border:1px solid #dfe1e5;
-    border-radius:24px;
-    padding:0 50px;
-    font-size:16px;
+    height:55px;
+    border-radius:50px;
+    border:2px solid #004a7c;
+    padding:0 60px;
+    font-size:18px;
     outline:none;
 }
 
 .search-main:focus{
-    box-shadow:0 1px 6px rgba(32,33,36,0.28);
+    box-shadow:0 0 10px #004a7c55;
 }
 
 .search-icon{
     position:absolute;
-    left:18px;
-    top:12px;
-    color:#9aa0a6;
+    left:20px;
+    top:14px;
+    font-size:22px;
+    color:#004a7c;
+}
+
+/* STATUS */
+
+.engine-status{
+    margin-top:15px;
+    text-align:center;
+    color:#666;
+    font-size:14px;
 }
 
 /* RESULTS */
 
 #results-container{
     width:100%;
-    max-width:584px;
     margin-top:25px;
     display:none;
 }
 
+/* CARD */
+
 .result-card{
-    padding:15px 20px;
-    border-bottom:1px solid #f1f3f4;
-    position:relative;
-    transition:0.2s;
+    background:#f7fbff;
+    border:1px solid #dbe8ff;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:18px;
+    transition:0.3s;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05);
 }
 
 .result-card:hover{
-    background:#f8fbff;
+    transform:translateY(-2px);
+    background:#edf6ff;
 }
 
 .res-url{
     font-size:13px;
-    color:#006621;
+    color:#008000;
+    margin-bottom:6px;
     display:block;
 }
 
 .res-title{
-    font-size:19px;
-    color:#1a0dab;
-    text-decoration:none;
+    font-size:24px;
+    font-weight:700;
+    color:#004a7c;
     cursor:pointer;
+    margin-bottom:10px;
 }
 
 .res-title:hover{
@@ -133,36 +146,28 @@ body{
 }
 
 .rank-badge{
-    position:absolute;
-    right:10px;
-    top:15px;
-    font-size:10px;
-    background:#f1f3f4;
-    padding:2px 8px;
-    border-radius:10px;
-    color:#5f6368;
-}
-
-/* ENGINE */
-
-.engine-status{
+    display:inline-block;
+    margin-top:8px;
+    background:#e6eefc;
+    color:#004a7c;
+    padding:4px 12px;
+    border-radius:20px;
     font-size:12px;
-    color:#888;
-    margin-top:10px;
-    font-style:italic;
+    font-weight:600;
 }
 
-/* SHARE BUTTON */
+/* SHARE */
 
 .share-btn{
-    margin-top:10px;
+    width:100%;
+    margin-top:15px;
+    height:45px;
+    border:none;
+    border-radius:40px;
     background:#004a7c;
     color:white;
-    border:none;
-    padding:8px 15px;
-    border-radius:20px;
+    font-size:15px;
     cursor:pointer;
-    font-size:12px;
 }
 
 .share-btn:hover{
@@ -184,15 +189,15 @@ body{
 
 <div class="main-container">
 
-    <h1 class="logo">
+    <div class="logo">
         Nexura
-    </h1>
+    </div>
 
     <div class="search-wrapper">
 
-        <span class="search-icon">
+        <div class="search-icon">
             🔍
-        </span>
+        </div>
 
         <input
             type="text"
@@ -214,7 +219,7 @@ body{
 
 <script>
 
-// DATA LINKS
+// LINKS
 const domainRulesLink =
 "https://muhammadtaqi512q-oss.github.io/.mt/domains";
 
@@ -250,7 +255,7 @@ async function initEngine(){
 
     try{
 
-        // FETCH RULES
+        // FETCH DOMAIN RULES
         const ruleRes =
         await fetch(domainRulesLink);
 
@@ -291,7 +296,7 @@ async function initEngine(){
         .map(s=>s.trim().replace(".",""))
         || [];
 
-        // FETCH DATA
+        // FETCH WEBSITE DATA
         const webRes =
         await fetch(websitesDataLink);
 
@@ -339,6 +344,7 @@ async function initEngine(){
 
         });
 
+        // SUCCESS
         statusDiv.innerText =
         "Nexura Core Engine Linked";
 
@@ -353,10 +359,10 @@ async function initEngine(){
 
         input.focus();
 
-        // HASH OPEN
+        // HASH CHECK
         openFromHash();
 
-        // SHOW ALL IF NO HASH
+        // NO HASH = SHOW ALL
         if(!location.hash){
 
             render(websiteDB);
@@ -370,7 +376,7 @@ async function initEngine(){
         console.log(e);
 
         statusDiv.innerText =
-        "Engine Failed";
+        "Engine Link Failed";
 
         statusDiv.style.color =
         "red";
@@ -379,7 +385,7 @@ async function initEngine(){
 
 }
 
-// PRIORITY
+// PRIORITY SYSTEM
 function getPriorityScore(url){
 
     const link =
@@ -452,15 +458,15 @@ input.addEventListener("input",()=>{
 
     // FILTER
     const filtered =
-    websiteDB.filter(i=>
+    websiteDB.filter(item=>
 
-        i.name
+        item.name
         .toLowerCase()
         .includes(query)
 
         ||
 
-        i.display
+        item.display
         .toLowerCase()
         .includes(query)
 
@@ -486,6 +492,7 @@ function render(data){
 
     container.innerHTML = "";
 
+    // NO RESULTS
     if(data.length === 0){
 
         container.style.display =
@@ -519,9 +526,9 @@ function render(data){
                 ${item.name}
             </div>
 
-            <span class="rank-badge">
+            <div class="rank-badge">
                 P${Math.floor(score)}
-            </span>
+            </div>
 
             <button class="share-btn">
                 Share
@@ -534,9 +541,9 @@ function render(data){
             ".res-title"
         ).addEventListener("click",()=>{
 
+            // ONLY THIS PROFILE
             location.hash =
-            item.name
-            .toLowerCase();
+            item.name.toLowerCase();
 
         });
 
@@ -553,8 +560,7 @@ function render(data){
 
             "#" +
 
-            item.name
-            .toLowerCase();
+            item.name.toLowerCase();
 
             navigator.clipboard
             .writeText(shareURL);
@@ -590,7 +596,7 @@ function openFromHash(){
 
     }
 
-    // ONLY MATCH
+    // ONLY MATCH PROFILE
     const filtered =
     websiteDB.filter(item=>
 
@@ -600,7 +606,32 @@ function openFromHash(){
 
     );
 
+    // SHOW ONLY MATCH
     render(filtered);
+
+    // SCROLL
+    setTimeout(()=>{
+
+        const card =
+        document.querySelector(
+            ".result-card"
+        );
+
+        if(card){
+
+            card.scrollIntoView({
+
+                behavior:"smooth",
+                block:"center"
+
+            });
+
+            card.style.border =
+            "2px solid #004a7c";
+
+        }
+
+    },100);
 
 }
 

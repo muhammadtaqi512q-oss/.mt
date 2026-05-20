@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXURA DOMAIN</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
+
+body{
+    background:#0a0f1f;
+    color:white;
+    min-height:100vh;
+    overflow-x:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:900px;
+    margin:auto;
+    padding:20px;
+}
+
+.title{
+    text-align:center;
+    margin-top:30px;
+    margin-bottom:30px;
+}
+
+.title h1{
+    font-size:50px;
+    color:#00ffe0;
+    letter-spacing:3px;
+}
+
+.title p{
+    color:#ccc;
+    margin-top:10px;
+}
+
+.card{
+    background:#111a33;
+    border:2px solid #00ffe0;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:25px;
+    box-shadow:0 0 20px rgba(0,255,224,0.3);
+}
+
+h2{
+    margin-bottom:20px;
+    color:#00ffe0;
+}
+
+input, textarea, button{
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    margin-top:12px;
+    font-size:16px;
+}
+
+input, textarea{
+    background:#1c284d;
+    color:white;
+}
+
+button{
+    background:#00ffe0;
+    color:black;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:white;
+}
+
+.chat-box{
+    background:#0d1429;
+    height:350px;
+    overflow-y:auto;
+    padding:15px;
+    border-radius:15px;
+    margin-bottom:15px;
+    border:1px solid #00ffe0;
+}
+
+.msg{
+    margin-bottom:15px;
+    padding:10px;
+    border-radius:10px;
+}
+
+.user{
+    background:#003d35;
+}
+
+.bot{
+    background:#1d2647;
+}
+
+.final-card{
+    display:none;
+    text-align:center;
+}
+
+.final-card h3{
+    margin:10px 0;
+    color:#00ffe0;
+}
+
+.download-btn{
+    margin-top:20px;
+}
+
+canvas{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="title">
+<h1>NEXURA DOMAIN</h1>
+<p>AI Domain Coding System</p>
+</div>
+
+<div class="card">
+<h2>OPTION 1 : USER DETAILS</h2>
+
+<input type="text" id="firstName" placeholder="Enter Your Name">
+
+<input type="text" id="firstDomain" placeholder="Enter Domain Name">
+
+<input type="password" id="firstPassword" placeholder="Enter Password">
+</div>
+
+<div class="card">
+<h2>OPTION 2 : WRITE CODE AND GET YOUR DOMAIN</h2>
+
+<div class="chat-box" id="chatBox"></div>
+
+<input type="text" id="userInput" placeholder="Write Prompt Here">
+
+<button onclick="sendMessage()">SEND</button>
+</div>
+
+<div class="card final-card" id="finalCard">
+<h2>DOMAIN CREATED</h2>
+
+<h3 id="showName"></h3>
+<h3 id="showDomain"></h3>
+<h3 id="showTlds"></h3>
+<h3 id="showGmail"></h3>
+<h3 id="showPassword"></h3>
+
+<button class="download-btn" onclick="downloadCard()">
+DOWNLOAD PICTURE
+</button>
+</div>
+
+<canvas id="canvas" width="800" height="500"></canvas>
+
+</div>
+
+<script>
+let step = 1;
+
+let tlds = "";
+let domainName = "";
+let gmail = "";
+let userName = "";
+let generatedPassword = "";
+
+function addMessage(text, type){
+    const box = document.getElementById("chatBox");
+
+    const msg = document.createElement("div");
+    msg.classList.add("msg");
+    msg.classList.add(type);
+
+    msg.innerText = text;
+
+    box.appendChild(msg);
+
+    box.scrollTop = box.scrollHeight;
+}
+
+function convertText(text){
+
+    text = text.toLowerCase();
+
+    let result = [];
+
+    for(let i=0;i<text.length;i++){
+
+        let ch = text[i];
+
+        if(ch >= 'a' && ch <= 'z'){
+            result.push(ch.charCodeAt(0)-96);
+        }
+        else if(ch === " "){
+            result.push("@");
+        }
+        else{
+            result.push(ch);
+        }
+    }
+
+    return "[" + result.join(",") + "]";
+}
+
+function generatePassword(name, domain){
+
+    let full = (name + domain).toLowerCase();
+
+    let arr = [];
+
+    for(let i=0;i<full.length;i++){
+
+        let ch = full[i];
+
+        if(ch >= 'a' && ch <= 'z'){
+            arr.push(ch.charCodeAt(0)-96);
+        }
+        else if(ch === " "){
+            arr.push("@");
+        }
+    }
+
+    return arr.join(",");
+}
+
+function sendMessage(){
+
+    let input = document.getElementById("userInput");
+    let value = input.value.trim();
+
+    if(value === "") return;
+
+    addMessage(value,"user");
+
+    input.value = "";
+
+    setTimeout(()=>{
+
+        if(step === 1){
+
+            if(value.toLowerCase() === "convert mt language into simple language"){
+                addMessage("ok","bot");
+                step = 2;
+            }else{
+                addMessage(convertText(value),"bot");
+            }
+
+        }
+
+        else if(step === 2){
+
+            addMessage("TLDS ID","bot");
+            step = 3;
+
+        }
+
+        else if(step === 3){
+
+            tlds = value;
+
+            addMessage("domain name","bot");
+            step = 4;
+
+        }
+
+        else if(step === 4){
+
+            domainName = value;
+
+            addMessage(domainName + tlds + " is your domain","bot");
+
+            step = 5;
+
+        }
+
+        else if(step === 5){
+
+            if(value.toLowerCase() === "yes"){
+                addMessage("YOUR GMAIL","bot");
+                step = 6;
+            }else{
+                addMessage("TLDS ID","bot");
+                step = 3;
+            }
+
+        }
+
+        else if(step === 6){
+
+            gmail = value;
+
+            addMessage("your name","bot");
+            step = 7;
+
+        }
+
+        else if(step === 7){
+
+            userName = value;
+
+            addMessage("password","bot");
+            step = 8;
+
+        }
+
+        else if(step === 8){
+
+            generatedPassword = generatePassword(userName,domainName);
+
+            addMessage(generatedPassword,"bot");
+
+            showFinalCard();
+
+            step = 9;
+        }
+
+    },500);
+}
+
+function showFinalCard(){
+
+    document.getElementById("finalCard").style.display = "block";
+
+    document.getElementById("showName").innerText =
+    "NAME = " + userName;
+
+    document.getElementById("showDomain").innerText =
+    "DOMAIN = " + domainName;
+
+    document.getElementById("showTlds").innerText =
+    "TLDS = " + tlds;
+
+    document.getElementById("showGmail").innerText =
+    "GMAIL = " + gmail;
+
+    document.getElementById("showPassword").innerText =
+    "PASSWORD = " + generatedPassword;
+}
+
+function downloadCard(){
+
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+
+    ctx.fillStyle = "#0a0f1f";
+    ctx.fillRect(0,0,800,500);
+
+    ctx.fillStyle = "#00ffe0";
+    ctx.font = "40px Arial";
+
+    ctx.fillText("NEXURA DOMAIN",220,70);
+
+    ctx.font = "28px Arial";
+    ctx.fillStyle = "white";
+
+    ctx.fillText("NAME = " + userName,60,170);
+
+    ctx.fillText("DOMAIN = " + domainName,60,240);
+
+    ctx.fillText("TLDS = " + tlds,60,310);
+
+    ctx.fillText("GMAIL = " + gmail,60,380);
+
+    ctx.fillText("PASSWORD = " + generatedPassword,60,450);
+
+    let link = document.createElement("a");
+
+    link.download = "nexura-domain.png";
+
+    link.href = canvas.toDataURL();
+
+    link.click();
+}
+</script>
+
+</body>
+</html>

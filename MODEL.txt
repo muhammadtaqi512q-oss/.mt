@@ -1,0 +1,37 @@
+import os
+import sys
+from huggingface_hub import duplicate_repo
+
+def instant_hf_fork():
+    print("=== Hugging Face Remote Fork Process Started ===")
+    
+    # Hugging Face Secret se token automatic read ho raha hai
+    hf_token = os.getenv("HF_TOKEN_MK")
+    
+    if not hf_token:
+        print("ERROR: 'HF_TOKEN_MK' secret repository mein majood nahi hai!", file=sys.stderr)
+        sys.exit(1)
+        
+    # Source (original) aur Destination (aapka model) ka naam
+    source_model = "unsloth/Qwen2.5-VL-3B-Instruct-GGUF"  # <--- Isko asal model name se badlein
+    destination_model = "MUSTJAB-KING/QUEEN-GGUF" # <--- Aapka account aur model name
+
+    print(f"Duplicating remote repository from '{source_model}' to '{destination_model}'...")
+    print("Running server-to-server copy directly on Hugging Face infrastructure.")
+
+    try:
+        # duplicate_repo function pure model ki 50GB files ko instant duplicate karta hai
+        duplicate_repo(
+            from_id=source_model, 
+            to_id=destination_model,
+            repo_type="model",
+            token=hf_token
+        )
+        print("\n🎉 SUCCESS! 50GB Model aapki profile par duplicate ho gaya hai!")
+        print(f"Repository Link: https://huggingface.co/{destination_model}")
+    except Exception as e:
+        print(f"\n❌ Error during duplication: {e}", file=sys.stderr)
+        sys.exit(1)
+
+if __name__ == "__main__":
+    instant_hf_fork()

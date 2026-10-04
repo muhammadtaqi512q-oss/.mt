@@ -247,3 +247,168 @@ Google AdMob & Ads Integration: Mobile APKs mein AdMob banners ya rewarded video
 Web Game Portals: CrazyGames, Poki, ya GameDistribution jaise platforms HTML5 games host karne ke paise dete hain (Revenue Share ya License Fee).
 
 Freelancing (Upwork / Fiverr): Log customized 2D/3D HTML games, educational mini-games, ya ad-based games banane ke liye acha pay karte hain.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+1. CrazyGames Earning Estimates (CPM & Plays)
+CrazyGames ad revenue CPM (Cost Per Mille / Per 1000 Impressions) ke hisab se distribute hota hai:
+
+Average Earning Rate: Har 1,000 gameplays / impressions par aam tor par $1 se $5 (takriban 280 PKR se 1,400 PKR) tak earning hoti hai.
+
+Tier-1 Countries (US, UK, Canada, Europe): Agar aapki game ko High-CPM countries se traffic milta hai, toh 1,000 plays par $5 se $15+ tak bhi mil sakte hain.
+
+Tier-3 Countries: Asia ya local region se traffic aane par eCPM thoda kam ($0.50 se $2) rehta hai.
+
+Example: Agar aapki game achi chal nikalti hai aur us par mahine ke 100,000 (1 Lakh) Plays aate hain, toh aap ba-asani $100 se $400+ per month earn kar sakte hain.
+
+2. Income Sources on CrazyGames
+CrazyGames developers ko earn karne ke do main raste deta hai:
+
+Ad Revenue Share (Main Source):
+
+Midroll Ads: Game levels ke beech ya pause hone par chalne wale ads.
+
+Rewarded Ads: Player extra coins, health, ya revive lene ke liye ad dekhta hai (is ad ka eCPM sab se zyada hota hai).
+
+In-App Purchases (IAP):
+
+Clear, customizable items ya power-ups sell karne par players se direct digital payments milte hain, jiska share CrazyGames developer ko deta hai.
+
+3. Revenue Share Breakdown
+CrazyGames Split: Standard revenue split aam tor par 50% / 50% ya 60% / 40% (Developer ke haq mein) hota hai, jab aap unka official CrazyGames SDK (Ad & Analytics SDK) apni game mein integrate karte hain.
+
+Exclusive Deals / Exclusive Publishing: Agar aapki game boht high-quality hai aur aap usko sirf CrazyGames par publish karte hain, toh revenue share increase ho kar 70% tak bhi ja sakta hai.
+
+4. Direct Game Licensing Option (Upfront Cash)
+Ad revenue ke ilawa, agar aapki game boht unique aur high polish hai, toh CrazyGames ya dusre web portals (Poki, GameDistribution):
+
+Sponsorship / Non-Exclusive License: $200 se $1,500 per game (Ek hi baar upfront payment, aur game aapki rehti hai).
+
+Exclusive License: $1,000 se $5,000+ per game (Aap game ke exclusive rights unhe sell kar dete hain).
+
+High Earning Game Banane Ke Liye Important Tips:
+CrazyGames SDK Integrations: Midroll aur Rewarded Ads lazmi lagayein. Rewarded ads sab se zyada revenue generate karte hain.
+
+Game Polish & Mobile Responsive: Game Desktop aur Mobile/Touch Devices dono par smooth chalti ho.
+
+Player Retention: Level progression aur unlockable skins/weapons rakhein taake player lamba waqt game mein rahe.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Step 1: Game Files Aur SDK Ready Karein
+CrazyGames par game upload karne se pehle 3 cheezein zaroori hain:
+
+CrazyGames SDK Integration:
+
+Aapki HTML/JS game mein CrazyGames HTML5 SDK add hona chahiye taake Ads (Midroll/Rewarded) aur Banners display ho sakein.
+
+Basic SDK script tags game ke index.html ki <head> section mein include ki jaati hain:
+
+HTML
+<script src="https://sdk.crazygames.com/crazygames-sdk-v2.js"></script>
+ZIP File Package:
+
+Apni game ki tamaam files (index.html, JavaScript, CSS, images, audio) ko ek single .zip file mein compress kar lein.
+
+Important: index.html file bilkul main root folder ke andar honi chahiye (kisi sub-folder ke andar nahi).
+
+Game Assets:
+
+Thumbnail Images: Square Cover (512x512 px) aur Banner Image (e.g., 1280x720 px).
+
+Description: Game ki short detail aur controls instructions.
+
+Step 2: CrazyGames Developer Portal Par Account Banayein
+Website Par Jayein: CrazyGames Developer Portal par jayein.
+
+Sign Up: Apne email address ya Google account se account create karein.
+
+Profile Verification: Apni basic profile info (Name, Developer/Studio Name) fill karke account verify karein.
+
+Step 3: Game Submit Karein (Upload Process)
+Add New Game: Dashboard par login karke "Submit a Game" ya "Add Game" button par click karein.
+
+Basic Information Fill Karein:
+
+Game Title: Apni game ka naam likhein.
+
+Category / Genre: Game ki type select karein (e.g., Action, Shooting, Puzzle, Arcade).
+
+Controls: Player ke liye keys/touch instructions detail se likhein (e.g., WASD / Arrow Keys to move, Space to Jump).
+
+Description: Game ka attractive intro aur features likhein.
+
+Upload ZIP File:
+
+Prepared .zip file ko drag & drop karke upload karein.
+
+Upload Visual Assets:
+
+High-quality Thumbnails, Cover Banners, aur 2–3 Game Screenshots upload karein.
+
+Step 4: Testing & SDK Verification
+In-Browser Preview: Upload hone ke baad CrazyGames Portal aapko ek Preview / QA Tool deta hai.
+
+Test Ads & Gameplay:
+
+Check karein ke game browser canvas mein sahi fit aa rahi hai.
+
+Verify karein ke CrazyGames SDK through Ads (Midroll aur Rewarded) sahi trigger ho rahe hain.
+
+Step 5: Submission & QA Review
+Submit for Review: Sab kuch testing ke baad "Submit for Approval" par click karein.
+
+QA Team Review: CrazyGames ki Quality Assurance (QA) team aapki game test karegi.
+
+Checking Criteria: Game bug-free hai, mobile/desktop par properly responsive hai, aur ads sahi se integrate huay hain.
+
+Approval Time: Review process aam tor par 2 se 5 working days leta hai.
+
+Step 6: Publishing & Revenue Setup
+Go Live: Approval ke baad aapki game live ho jaati hai aur lakho players ke liye available hoti hai.
+
+Payment & Payout Setup:
+
+Developer Portal ke Earnings / Payouts section mein ja kar apna Payout Method setup karein (aam tor par Wire Transfer / Bank Transfer ya PayPal ka option hota hai).
+
+Jaise hi minimum threshold (aam tor par $50 ya $100) achieve hota hai, monthly payouts shuru ho jaate hain.
